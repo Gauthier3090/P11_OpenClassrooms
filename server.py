@@ -1,11 +1,14 @@
-from app import load_competitions, load_clubs
+from app import load_competitions, load_clubs, update_booked_places, initialize_booked_places, sort_competitions_date
 from flask import Flask, render_template, request, redirect, flash, url_for
+
 
 app = Flask(__name__)
 app.secret_key = 'something_special'
 
 competitions = load_competitions()
 clubs = load_clubs()
+past_competitions, present_competitions = sort_competitions_date(competitions)
+places_booked = initialize_booked_places(competitions, clubs)
 
 
 @app.route('/')
@@ -41,18 +44,40 @@ def book(competition, club):
 def purchase_places():
     competition = [c for c in competitions if c['name'] == request.form['competition']][0]
     club = [c for c in clubs if c['name'] == request.form['club']][0]
+
     try:
         places_required = int(request.form['places'])
+
         if places_required > int(competition['numberOfPlaces']):
-            flash("Not enough places available", "error")
+            flash('Not enough places available.', 'error')
+
+        elif places_required * 3 > int(club['points']):
+            flash("You don't have enough points.", 'error')
+
         elif places_required > 12:
             flash("You can't book more than 12 places in a competition.", 'error')
+
         else:
-            competition['numberOfPlaces'] = int(competition['numberOfPlaces']) - places_required
-            flash('Great-booking complete!')
+            try:
+                update_booked_places(competition, club, places_booked, places_required)
+                competition['numberOfPlaces'] = int(competition['numberOfPlaces']) - places_required
+                club['points'] = int(club['points']) - (places_required * 3)
+                flash('Great-booking complete!', 'success')
+
+                return render_template(
+                    'welcome.html',
+                    club=club,
+                    past_competitions=past_competitions,
+                    present_competitions=present_competitions
+                )
+
+            except ValueError as error_message:
+                flash(error_message.__str__(), 'error')
+
     except ValueError:
         flash('Please enter a number between 0 and 12.', 'error')
-    return render_template('welcome.html', club=club, competitions=competitions)
+
+    return render_template('booking.html', club=club, competition=competition), 400
 
 
 @app.route('/logout')
