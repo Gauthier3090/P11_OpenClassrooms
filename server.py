@@ -13,7 +13,7 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/showSummary', methods=['POST'])
+@app.route('/show-summary', methods=['POST'])
 def show_summary():
     try:
         club = [club for club in clubs if club['email'] == request.form['email']][0]
@@ -37,13 +37,21 @@ def book(competition, club):
         return render_template('welcome.html', club=club, competitions=competitions)
 
 
-@app.route('/purchasePlaces', methods=['POST'])
+@app.route('/purchase-places', methods=['POST'])
 def purchase_places():
     competition = [c for c in competitions if c['name'] == request.form['competition']][0]
     club = [c for c in clubs if c['name'] == request.form['club']][0]
-    places_required = int(request.form['places'])
-    competition['numberOfPlaces'] = int(competition['numberOfPlaces']) - places_required
-    flash('Great-booking complete!')
+    try:
+        places_required = int(request.form['places'])
+        if places_required > int(competition['numberOfPlaces']):
+            flash("Not enough places available", "error")
+        elif places_required > 12:
+            flash("You can't book more than 12 places in a competition.", 'error')
+        else:
+            competition['numberOfPlaces'] = int(competition['numberOfPlaces']) - places_required
+            flash('Great-booking complete!')
+    except ValueError:
+        flash('Please enter a number between 0 and 12.', 'error')
     return render_template('welcome.html', club=club, competitions=competitions)
 
 
