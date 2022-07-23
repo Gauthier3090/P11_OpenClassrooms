@@ -1,4 +1,4 @@
-from app import load_competitions, load_clubs, update_booked_places, initialize_booked_places, sort_competitions_date
+from app import load_competitions, load_clubs, update_places, init_places, sorted_competitions
 from flask import Flask, render_template, request, redirect, flash, url_for
 
 
@@ -7,8 +7,8 @@ app.secret_key = 'something_special'
 
 competitions = load_competitions()
 clubs = load_clubs()
-past_competitions, present_competitions = sort_competitions_date(competitions)
-places_booked = initialize_booked_places(competitions, clubs)
+past_competitions, present_competitions = sorted_competitions(competitions)
+places_booked = init_places(competitions, clubs)
 
 
 @app.route('/')
@@ -59,7 +59,7 @@ def purchase_places():
 
         else:
             try:
-                update_booked_places(competition, club, places_booked, places_required)
+                update_places(competition, club, places_booked, places_required)
                 competition['numberOfPlaces'] = int(competition['numberOfPlaces']) - places_required
                 club['points'] = int(club['points']) - (places_required * 3)
                 flash('Great-booking complete!', 'success')

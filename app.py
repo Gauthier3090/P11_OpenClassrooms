@@ -14,21 +14,21 @@ def load_competitions():
         return list_of_competitions
 
 
-def sort_competitions_date(comps):
-    past = []
-    present = []
+def sorted_competitions(comps):
+    old = []
+    current = []
 
     for comp in comps:
         comp_date = datetime.strptime(comp['date'], '%Y-%m-%d %H:%M:%S')
         if comp_date < datetime.now():
-            past.append(comp)
+            old.append(comp)
         elif comp_date >= datetime.now():
-            present.append(comp)
+            current.append(comp)
 
-    return past, present
+    return old, current
 
 
-def initialize_booked_places(comps, clubs_list):
+def init_places(comps, clubs_list):
     places = []
     for comp in comps:
         for club in clubs_list:
@@ -37,7 +37,7 @@ def initialize_booked_places(comps, clubs_list):
     return places
 
 
-def update_booked_places(competition, club, places_booked, places_required):
+def update_places(competition, club, places_booked, places_required):
     for item in places_booked:
         if item['competition'] == competition['name']:
             if item['booked'][1] == club['name'] and item['booked'][0] + places_required <= 12:
