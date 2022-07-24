@@ -1,26 +1,66 @@
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Summary | GUDLFT Registration</title>
-</head>
-<body>
-<h2>Welcome, {{club['email']}} </h2><a href="{{url_for('logout')}}">Logout</a>
-    Points available: {{club['points']}}
-    <h3>Competitions:</h3>
-    <ul>
-        {% for comp in competitions%}
-        <li>
-            {{comp['name']}}<br/>
-            Date: {{comp['date']}}<br/>
-            Number of Places: {{comp['numberOfPlaces']}}<br/>
-            {%if comp['numberOfPlaces']|int >0%}
-                <a href="{{ url_for('book',competition=comp['name'],club=club['name']) }}">Book Places</a>
-            {%endif%}
-            <hr/>
-        </li>
-        {% endfor %}
-    </ul>
+
+{% include 'head.html' %}
+
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="d-flex justify-content-center">
+            <h2 class="navbar-brand m-3">Welcome, {{club['email']}}</h2>
+            <a class="btn btn-primary btn-sm h-25 m-auto" href="{{url_for('logout')}}">Logout</a>
+        </div>
+    </nav>
+
     {% include 'messages.html' %}
+
+    <p class="fw-bold m-3">Points available: {{club['points']}}</p>
+
+    <h3 class="text-center mb-3">New Competitions</h3>
+    <table class="table table-striped table-light w-50 m-auto">
+      <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Date</th>
+            <th scope="col">Number of places</th>
+            <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for comp in new_competitions %}
+            <tr>
+                <td>{{ comp['name'] }}</td>
+                <td>{{ comp['date'] }}</td>
+                <td> {{ comp['numberOfPlaces'] }}</td>
+                <td>
+                    {%if comp['numberOfPlaces']|int >0%}
+                        <a class="btn btn-primary h-25 btn-sm"
+                           href="{{ url_for('book',competition=comp['name'], club=club['name']) }}">Book Places</a>
+                    {% else %}
+                        Booking is full
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <h3 class="text-center mt-5 mb-3">Old Competitions</h3>
+    <table class="table table-striped table-light w-50 m-auto">
+      <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Date</th>
+            <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for comp in old_competitions %}
+            <tr>
+                <td>{{ comp['name'] }}</td>
+                <td>{{ comp['date'] }}</td>
+                <td>Booking closed</td>
+            </tr>
+        {% endfor %}
+      </tbody>
+    </table>
 </body>
 </html>

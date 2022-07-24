@@ -1,4 +1,4 @@
-from app import load_competitions, load_clubs, update_places, init_places, sorted_competitions
+from app import load_competitions, load_clubs, update_places, list_places_booked, sorted_competitions
 from flask import Flask, render_template, request, redirect, flash, url_for
 
 
@@ -7,8 +7,8 @@ app.secret_key = 'something_special'
 
 competitions = load_competitions()
 clubs = load_clubs()
-past_competitions, present_competitions = sorted_competitions(competitions)
-places_booked = init_places(competitions, clubs)
+old_competitions, new_competitions = sorted_competitions(competitions)
+places_booked = list_places_booked(competitions, clubs)
 
 
 @app.route('/')
@@ -20,7 +20,12 @@ def index():
 def show_summary():
     try:
         club = [club for club in clubs if club['email'] == request.form['email']][0]
-        return render_template('welcome.html', club=club, competitions=competitions)
+        return render_template(
+            'welcome.html',
+            club=club,
+            old_competitions=old_competitions,
+            new_competitions=new_competitions
+        )
     except IndexError:
         if request.form['email'] == '':
             flash("Please enter your email.", 'error')
@@ -51,10 +56,11 @@ def purchase_places():
         if places_required > int(competition['numberOfPlaces']):
             flash('Not enough places available.', 'error')
 
-        elif places_required * 3 > int(club['points']):
+        elif places_required > int(club['points']):
             flash("You don't have enough points.", 'error')
 
         elif places_required > 12:
+            print(places_required > 12)
             flash("You can't book more than 12 places in a competition.", 'error')
 
         else:
@@ -63,12 +69,12 @@ def purchase_places():
                 competition['numberOfPlaces'] = int(competition['numberOfPlaces']) - places_required
                 club['points'] = int(club['points']) - (places_required * 3)
                 flash('Great-booking complete!', 'success')
-
+                print(old_competitions, new_competitions)
                 return render_template(
                     'welcome.html',
                     club=club,
-                    past_competitions=past_competitions,
-                    present_competitions=present_competitions
+                    old_competitions=old_competitions,
+                    new_competitions=new_competitions
                 )
 
             except ValueError as error_message:

@@ -15,35 +15,36 @@ def load_competitions():
 
 
 def sorted_competitions(comps):
-    old = []
-    current = []
+    finished_competitions = []
+    new_competitions = []
+    for info in comps:
+        info_date = datetime.strptime(info['date'], '%Y-%m-%d %H:%M:%S')
+        if info_date < datetime.now():
+            finished_competitions.append(info)
+        else:
+            new_competitions.append(info)
 
-    for comp in comps:
-        comp_date = datetime.strptime(comp['date'], '%Y-%m-%d %H:%M:%S')
-        if comp_date < datetime.now():
-            old.append(comp)
-        elif comp_date >= datetime.now():
-            current.append(comp)
-
-    return old, current
+    return finished_competitions, new_competitions
 
 
-def init_places(comps, clubs_list):
-    places = []
-    for comp in comps:
-        for club in clubs_list:
-            places.append({'competition': comp['name'], 'booked': [0, club['name']]})
-
-    return places
+def list_places_booked(competitions, clubs):
+    places_booked = []
+    for competition in competitions:
+        for club in clubs:
+            places_booked.append({'competition': competition['name'], 'booked': [0, club['name']]})
+    return places_booked
 
 
 def update_places(competition, club, places_booked, places_required):
     for item in places_booked:
         if item['competition'] == competition['name']:
-            if item['booked'][1] == club['name'] and item['booked'][0] + places_required <= 12:
-                item['booked'][0] += places_required
-                break
-            else:
-                raise ValueError("You can't book more than 12 places in a competition.")
-
+            print(item)
+            print(item['booked'][1], club['name'])
+            print(item['booked'][0] + places_required <= 12)
+            if item['booked'][1] == club['name']:
+                if item['booked'][0] + places_required <= 12:
+                    item['booked'][0] += places_required
+                    break
+                else:
+                    raise ValueError("You can't book more than 12 places in a competition.")
     return places_booked
