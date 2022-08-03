@@ -1,21 +1,19 @@
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Booking for {{competition['name']}} || GUDLFT</title>
-</head>
+{% include 'head.html' %}
 
-<body>
-    <h2>{{competition['name']}}</h2>
-    Places available: {{competition['numberOfPlaces']}}
-    <form action="/purchase-places" method="post">
-        <input type="hidden" name="club" value="{{club['name']}}">
-        <input type="hidden" name="competition" value="{{competition['name']}}">
-        <label for="places">How many places?</label><input type="number" name="places" id="places" />
-        <button type="submit">Book</button>
-    </form>
-
+<body class="bg-light">
+    <div class="d-flex flex-column border justify-content-center w-50 m-auto mt-5">
+        <h2 class="text-center">{{competition['name']}}</h2>
+        <p class="text-center">Places available: {{competition['numberOfPlaces']}}</p>
+        <form class="d-flex flex-column justify-content-center w-50 m-auto" action="/purchase-places" method="post">
+            <input class="form-control w-50 m-auto" type="hidden" name="club" value="{{club['name']}}">
+            <input class="form-control w-50 m-auto" type="hidden" name="competition" value="{{competition['name']}}">
+            <label for="places" class="text-center">How many places?</label>
+            <input class="form-control w-50 m-auto mt-2" type="number" name="places" id="places" />
+            <button class="btn btn-primary w-25 m-auto mt-2 mb-2" type="submit">Book</button>
+        </form>
+    </div>
     {% include 'messages.html' %}
 </body>
 

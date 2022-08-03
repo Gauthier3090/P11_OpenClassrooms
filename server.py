@@ -67,7 +67,7 @@ def purchase_places():
             try:
                 update_places(competition, club, places_booked, places_required)
                 competition['numberOfPlaces'] = int(competition['numberOfPlaces']) - places_required
-                club['points'] = int(club['points']) - (places_required * 3)
+                club['points'] = int(club['points']) - places_required
                 flash('Great-booking complete!', 'success')
                 print(old_competitions, new_competitions)
                 return render_template(
