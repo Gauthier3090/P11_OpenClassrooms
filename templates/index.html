@@ -2,11 +2,11 @@
 {% include 'head.html' %}
 <body class="bg-light">
     <h1 class="text-center mt-3">Welcome to the GUDLFT Registration Portal!</h1>
-    <form class="m-auto border w-50 m-auto" action="show-summary" method="post">
+    <form class="d-flex flex-column justify-content-center border w-50 m-auto" action="show-summary" method="post">
         <p class="text-center m-3 fw-bold">Please enter your secretary email to continue</p>
-        <label class="form-label" for="email">Email:</label>
-        <input class="form-control w-50" type="email" name="email" value="admin@irontemple.com" id=""/>
-        <button class="btn btn-primary" type="submit">Enter</button>
+            <input class="form-control w-50 m-auto" type="email" name="email" value="admin@irontemple.com"
+                   placeholder="Enter your email..."/>
+            <button class="btn btn-primary w-25 m-auto mt-2 mb-2" type="submit">Enter</button>
     </form>
     {% include 'messages.html' %}
 </body>
