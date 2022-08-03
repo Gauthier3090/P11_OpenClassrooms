@@ -38,9 +38,6 @@ def list_places_booked(competitions, clubs):
 def update_places(competition, club, places_booked, places_required):
     for item in places_booked:
         if item['competition'] == competition['name']:
-            print(item)
-            print(item['booked'][1], club['name'])
-            print(item['booked'][0] + places_required <= 12)
             if item['booked'][1] == club['name']:
                 if item['booked'][0] + places_required <= 12:
                     item['booked'][0] += places_required
