@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from app import load_competitions, load_clubs, update_places, list_places_booked, sorted_competitions
 from flask import Flask, render_template, request, redirect, flash, url_for
 
@@ -37,12 +39,18 @@ def show_summary():
 @app.route('/book/<competition>/<club>')
 def book(competition, club):
     found_club = [c for c in clubs if c['name'] == club][0]
-    found_competition = [c for c in competitions if c['name'] == competition][0]
-    if found_club and found_competition:
-        return render_template('booking.html', club=found_club, competition=found_competition)
-    else:
-        flash("Something went wrong-please try again")
-        return render_template('welcome.html', club=club, competitions=competitions)
+    try:
+        found_competition = [c for c in competitions if c['name'] == competition][0]
+        if datetime.strptime(found_competition['date'], '%Y-%m-%d %H:%M:%S') < datetime.now():
+            flash("This competition is over.", 'error')
+            status_code = 400
+        else:
+            return render_template('booking.html', club=found_club, competition=found_competition)
+    except IndexError:
+        flash("Error: Please try again.", 'error')
+        status_code = 404
+    return render_template("welcome.html", club=found_club,
+                           old_competitions=old_competitions, new_competitions=new_competitions), status_code
 
 
 @app.route('/purchase-places', methods=['POST'])

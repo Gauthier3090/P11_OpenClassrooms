@@ -42,7 +42,7 @@ class TestMorePointsThanAllowed:
         result = self.client.post(
             "/purchase-places",
             data={
-                "places": 5,
+                "places": 15,
                 "club": self.club[0]["name"],
                 "competition": self.competition[0]["name"]
             }

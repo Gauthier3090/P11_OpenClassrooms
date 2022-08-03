@@ -48,4 +48,4 @@ class TestBookDate:
             f"/book/fake-club/{self.clubs[0]['name']}"
         )
         assert result.status_code == 404
-        assert "Something went wrong-please try again" in result.data.decode()
+        assert "Error: Please try again." in result.data.decode()
