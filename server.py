@@ -94,6 +94,12 @@ def purchase_places():
     return render_template('booking.html', club=club, competition=competition), 400
 
 
+@app.route('/clubs')
+def view_club_points():
+    club_list = sorted(clubs, key=lambda club: club['name'])
+    return render_template('clubs.html', clubs=club_list)
+
+
 @app.route('/logout')
 def logout():
     return redirect(url_for('index'))
