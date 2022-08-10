@@ -1,4 +1,4 @@
-# Développez une application Web en utilisant Django
+# Améliorez une application Web Python par des tests et du débogage
 
 ![](https://camo.githubusercontent.com/7c691d06ed3e830244e052e43bb63780a25f0be9c7446cd4bea9f638dae92c99/68747470733a2f2f6f6e617465737465706f7572746f692e636f6d2f77702d636f6e74656e742f75706c6f6164732f323032302f30322f4c6f676f5f6f70656e636c617373726f6f6d735f6f6e617465737465706f7572746f692e6a7067)
 
