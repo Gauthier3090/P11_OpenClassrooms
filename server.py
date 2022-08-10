@@ -68,8 +68,10 @@ def purchase_places():
             flash("You don't have enough points.", 'error')
 
         elif places_required > 12:
-            print(places_required > 12)
             flash("You can't book more than 12 places in a competition.", 'error')
+
+        elif places_required < 0:
+            flash("Points are negatives. Please try again.", 'error')
 
         else:
             try:
