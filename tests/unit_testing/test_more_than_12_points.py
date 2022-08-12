@@ -76,3 +76,18 @@ class TestMoreThanTwelvePoints:
 
         assert result.status_code == 400
         assert "more than 12 places in a competition." in result.data.decode()
+
+    def test_negative_points(self):
+        booked = -5
+
+        result = self.client.post(
+            "/purchase-places",
+            data={
+                "places": booked,
+                "club": self.club[0]["name"],
+                "competition": self.competition[0]["name"]
+            }
+        )
+
+        assert result.status_code == 400
+        assert "Points are negatives. Please try again." in result.data.decode()
