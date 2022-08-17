@@ -26,7 +26,7 @@ class TestClubAccountPoints:
 
     def test_points_update(self):
         club_points_before = int(self.clubs[0]["points"])
-        places_booked = 5
+        places_booked = 1
 
         self.client.post(
             "/purchase-places",
@@ -41,4 +41,4 @@ class TestClubAccountPoints:
 
         assert result.status_code == 200
         assert f"<td>{self.clubs[0]['name']}</td>" in result.data.decode()
-        assert f"<td>{club_points_before - places_booked}</td>" in result.data.decode()
+        assert f"<td>{club_points_before - places_booked * 3}</td>" in result.data.decode()

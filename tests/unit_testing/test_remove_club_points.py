@@ -39,7 +39,7 @@ class TestRemoveClubPoints:
 
         assert result.status_code == 200
         assert "Great-booking complete!" in result.data.decode()
-        assert int(self.clubs[0]["points"]) == club_points_before - places_booked
+        assert int(self.clubs[0]["points"]) == club_points_before - places_booked * 3
 
     def test_empty_field(self):
         places_booked = ""

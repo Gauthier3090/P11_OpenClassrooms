@@ -64,7 +64,7 @@ def purchase_places():
         if places_required > int(competition['numberOfPlaces']):
             flash('Not enough places available.', 'error')
 
-        elif places_required > int(club['points']):
+        elif places_required * 3 > int(club['points']):
             flash("You don't have enough points.", 'error')
 
         elif places_required > 12:
@@ -76,8 +76,8 @@ def purchase_places():
         else:
             try:
                 update_places(competition, club, places_booked, places_required)
-                competition['numberOfPlaces'] = int(competition['numberOfPlaces']) - places_required
-                club['points'] = int(club['points']) - places_required
+                competition['numberOfPlaces'] = int(competition['numberOfPlaces']) - (places_required * 3)
+                club['points'] = int(club['points']) - (places_required * 3)
                 flash('Great-booking complete!', 'success')
                 return render_template(
                     'welcome.html',
